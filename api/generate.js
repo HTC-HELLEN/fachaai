@@ -14,13 +14,14 @@ export default async function handler(req, res) {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        version: "a9758cbfbd5f3c2094457d996681af52552901daa44f4a338dece2faf8a87f90",
+        version: "8abccf52e7cba9f6e82317253f4a3549082e966db5584e92c808ece132037776",
         input: {
           prompt: prompt,
           image: image,
-          prompt_strength: 0.5,
+          strength: 0.5,
           num_inference_steps: 20,
-          guidance_scale: 7
+          guidance_scale: 7.5,
+          negative_prompt: "ugly, blurry, low quality, distorted"
         }
       })
     });

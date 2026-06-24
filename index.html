@@ -1,385 +1,53 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Facha.ai — Simulador</title>
-<style>
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-:root{
-  --bg:#0A0A0A;--bg2:#111;--bg3:#1A1A1A;--bg4:#222;
-  --border:rgba(255,255,255,0.08);--border2:rgba(255,255,255,0.14);
-  --text:#F0EEE8;--muted:#888880;--accent:#C8A96E;--accent2:#E8C98E;--green:#4CAF82;
-}
-body{background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
-nav{height:60px;border-bottom:0.5px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 28px;background:rgba(10,10,10,0.95)}
-.logo{font-size:17px;font-weight:600;display:flex;align-items:center;gap:8px}
-.logo-mark{width:24px;height:24px;background:var(--accent);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#0A0A0A}
-.nav-pill{font-size:12px;background:rgba(76,175,130,0.12);border:0.5px solid rgba(76,175,130,0.3);border-radius:20px;padding:4px 12px;color:var(--green)}
-.btn-gold{background:var(--accent);color:#0A0A0A;border:none;border-radius:8px;padding:8px 18px;font-size:13px;font-weight:600;cursor:pointer}
-.layout{display:grid;grid-template-columns:320px 1fr;min-height:calc(100vh - 60px)}
-.panel{border-right:0.5px solid var(--border);padding:20px;overflow-y:auto;max-height:calc(100vh - 60px)}
-.section-label{font-size:11px;color:var(--accent);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;font-weight:500}
-.panel-section{margin-bottom:20px}
-.upload-zone{border:1.5px dashed var(--border2);border-radius:12px;padding:24px 16px;text-align:center;cursor:pointer;background:var(--bg2);transition:all 0.2s;position:relative;overflow:hidden}
-.upload-zone:hover{border-color:var(--accent)}
-.upload-zone.has-image{border-style:solid;border-color:var(--accent);padding:0}
-.upload-preview{width:100%;height:150px;object-fit:cover;border-radius:10px;display:block}
-.upload-icon{font-size:26px;margin-bottom:6px}
-.upload-text{font-size:13px;color:var(--muted)}
-.upload-hint{font-size:11px;color:var(--muted);opacity:0.6;margin-top:2px}
-.upload-change{position:absolute;bottom:8px;right:8px;background:rgba(0,0,0,0.75);border:0.5px solid var(--border2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--text);cursor:pointer}
-input[type=file]{display:none}
-.mat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
-.mat-btn{border:0.5px solid var(--border);border-radius:8px;padding:8px 4px;text-align:center;cursor:pointer;background:var(--bg2);transition:all 0.15s}
-.mat-btn.active{border:1.5px solid var(--accent);background:rgba(200,169,110,0.08)}
-.mat-swatch{width:100%;height:26px;border-radius:4px;margin-bottom:4px}
-.mat-name{font-size:10px;color:var(--muted)}
-.mat-btn.active .mat-name{color:var(--accent)}
-.color-row{display:flex;gap:8px;flex-wrap:wrap}
-.color-dot{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform 0.15s}
-.color-dot:hover{transform:scale(1.15)}
-.color-dot.active{border-color:var(--accent)}
-textarea{width:100%;background:var(--bg2);border:0.5px solid var(--border2);border-radius:10px;padding:12px 14px;font-size:13px;color:var(--text);resize:none;outline:none;font-family:inherit;line-height:1.6}
-textarea::placeholder{color:var(--muted)}
-textarea:focus{border-color:rgba(200,169,110,0.4)}
-.prompt-hint{font-size:11px;color:var(--muted);margin-top:6px}
-.prompt-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
-.tag{font-size:11px;padding:4px 10px;border-radius:20px;border:0.5px solid var(--border2);color:var(--muted);cursor:pointer;background:var(--bg2)}
-.tag:hover{border-color:var(--accent);color:var(--accent)}
-.btn-gerar{width:100%;padding:14px;background:var(--accent);color:#0A0A0A;border:none;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;margin-top:4px}
-.btn-gerar:hover{background:var(--accent2)}
-.btn-gerar:disabled{background:var(--bg4);color:var(--muted);cursor:not-allowed}
-.result-area{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px}
-.result-empty{text-align:center;color:var(--muted)}
-.result-empty-icon{font-size:52px;margin-bottom:16px;opacity:0.4}
-.result-empty h2{font-size:18px;font-weight:500;margin-bottom:8px;color:var(--text);opacity:0.5}
-.result-empty p{font-size:14px;opacity:0.4;max-width:300px;margin:0 auto}
-.result-card{width:100%;max-width:680px}
-.result-img-wrap{border-radius:16px;overflow:hidden;border:0.5px solid var(--border2);background:var(--bg2);position:relative}
-.result-img{width:100%;display:block;min-height:300px;object-fit:cover}
-.result-placeholder{width:100%;height:340px;position:relative;overflow:hidden}
-.r-sky{position:absolute;top:0;left:0;right:0;height:50%;background:linear-gradient(to bottom,#1a2535,#2d3f55)}
-.r-bld{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:66%;height:80%;display:flex;flex-direction:column;justify-content:space-around;padding:18px 14px;transition:background 0.5s}
-.r-gnd{position:absolute;bottom:0;left:0;right:0;height:10%;background:#1c1c1c}
-.r-wrow{display:flex;gap:8px;justify-content:center}
-.r-w{width:32px;height:40px;background:rgba(160,200,240,0.25);border:0.5px solid rgba(160,200,240,0.15);border-radius:2px}
-.ai-tag{position:absolute;top:14px;left:14px;background:rgba(76,175,130,0.15);border:0.5px solid rgba(76,175,130,0.3);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--green)}
-.result-meta{padding:14px 18px;border-top:0.5px solid var(--border)}
-.meta-info{display:flex;gap:20px;margin-bottom:12px}
-.meta-item{font-size:12px;color:var(--muted)}
-.meta-item strong{color:var(--text);display:block;font-size:13px;margin-bottom:1px}
-.result-actions{display:flex;gap:8px}
-.btn-action{flex:1;padding:10px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
-.btn-dl{background:var(--accent);color:#0A0A0A;border:none}
-.btn-dl:hover{background:var(--accent2)}
-.btn-sec{background:none;border:0.5px solid var(--border2);color:var(--text)}
-.btn-sec:hover{background:var(--bg3)}
-.loading-overlay{position:absolute;inset:0;background:rgba(10,10,10,0.88);display:flex;flex-direction:column;align-items:center;justify-content:center;border-radius:16px;z-index:10}
-.spinner{width:40px;height:40px;border:2px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:16px}
-@keyframes spin{to{transform:rotate(360deg)}}
-.loading-text{font-size:14px;color:var(--muted);margin-bottom:4px}
-.loading-sub{font-size:12px;color:var(--muted);opacity:0.5}
-.progress-bar{width:220px;height:3px;background:var(--border);border-radius:2px;margin-top:14px;overflow:hidden}
-.progress-fill{height:100%;background:var(--accent);border-radius:2px;width:0%;transition:width 0.4s}
-.error-box{background:rgba(224,85,85,0.08);border:0.5px solid rgba(224,85,85,0.3);border-radius:10px;padding:14px 16px;font-size:13px;color:#e07070;margin-top:12px;display:none;line-height:1.6}
-.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--bg3);border:0.5px solid var(--border2);border-radius:10px;padding:10px 20px;font-size:13px;z-index:300;transition:transform 0.3s;white-space:nowrap}
-.toast.show{transform:translateX(-50%) translateY(0)}
-</style>
-</head>
-<body>
-<nav>
-  <div class="logo"><div class="logo-mark">F</div> Facha.ai</div>
-  <div style="display:flex;align-items:center;gap:12px">
-    <div class="nav-pill">✦ IA ativa</div>
-    <button class="btn-gold" onclick="showToast('Publique na galeria depois de gerar!')">Publicar na galeria</button>
-  </div>
-</nav>
+export default async function handler(req, res) {
+  if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-<div class="layout">
-  <div class="panel">
+  const { image, prompt } = req.body;
+  const apiKey = process.env.REPLICATE_API_TOKEN;
 
-    <div class="panel-section">
-      <div class="section-label">📸 Foto da fachada</div>
-      <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
-        <img id="preview-img" class="upload-preview" style="display:none">
-        <div id="upload-placeholder">
-          <div class="upload-icon">🏠</div>
-          <div class="upload-text">Clique para enviar a foto</div>
-          <div class="upload-hint">JPG ou PNG · até 10MB</div>
-        </div>
-        <div class="upload-change" id="change-btn" style="display:none" onclick="clearImage(event)">✕ Trocar</div>
-      </div>
-      <input type="file" id="file-input" accept="image/*" onchange="handleFile(this)">
-    </div>
-
-    <div class="panel-section">
-      <div class="section-label">🧱 Material</div>
-      <div class="mat-grid">
-        <div class="mat-btn active" onclick="selMat(this,'ACM')">
-          <div class="mat-swatch" style="background:linear-gradient(135deg,#a0b4bc,#7a8e96)"></div>
-          <div class="mat-name">ACM</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Porcelanato')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(0deg,#bbb 0,#bbb 1px,#d4c8b8 1px,#d4c8b8 14px),repeating-linear-gradient(90deg,#bbb 0,#bbb 1px,#d4c8b8 1px,#d4c8b8 14px)"></div>
-          <div class="mat-name">Porcelanato</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Grafiato')">
-          <div class="mat-swatch" style="background:#c4b89c"></div>
-          <div class="mat-name">Grafiato</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Textura')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(45deg,#cfc0a4,#cfc0a4 2px,#d8cbb2 2px,#d8cbb2 8px)"></div>
-          <div class="mat-name">Textura</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Pastilha')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(0deg,#fff 0,#fff 1px,#a8b8cc 1px,#a8b8cc 10px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,#a8b8cc 1px,#a8b8cc 10px)"></div>
-          <div class="mat-name">Pastilha</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Concreto')">
-          <div class="mat-swatch" style="background:#b8b4ac"></div>
-          <div class="mat-name">Concreto</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Madeira')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(90deg,#a07848,#a07848 3px,#b89060 3px,#b89060 12px)"></div>
-          <div class="mat-name">Madeira</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Tijolo')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(0deg,#8c4830 0,#8c4830 2px,#c47860 2px,#c47860 12px)"></div>
-          <div class="mat-name">Tijolo</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel-section">
-      <div class="section-label">🎨 Tom de cor</div>
-      <div class="color-row">
-        <div class="color-dot active" style="background:#F5F0E8" onclick="selColor(this,'Areia')"></div>
-        <div class="color-dot" style="background:#8B9EA8" onclick="selColor(this,'Cinza azulado')"></div>
-        <div class="color-dot" style="background:#6B7B60" onclick="selColor(this,'Verde musgo')"></div>
-        <div class="color-dot" style="background:#C8A870" onclick="selColor(this,'Ocre')"></div>
-        <div class="color-dot" style="background:#B04830" onclick="selColor(this,'Terracota')"></div>
-        <div class="color-dot" style="background:#3C4858" onclick="selColor(this,'Grafite')"></div>
-        <div class="color-dot" style="background:#F8F8F6;border-color:rgba(255,255,255,0.2)" onclick="selColor(this,'Branco')"></div>
-        <div class="color-dot" style="background:#2C3040;border-color:rgba(255,255,255,0.1)" onclick="selColor(this,'Preto')"></div>
-      </div>
-    </div>
-
-    <div class="panel-section">
-      <div class="section-label">✍️ O que você deseja</div>
-      <textarea id="prompt" rows="4" placeholder="Ex: fachada moderna com ACM grafite, janelas amplas, detalhes em madeira, estilo minimalista..."></textarea>
-      <div class="prompt-hint">Quanto mais detalhes, melhor o resultado.</div>
-      <div class="prompt-tags">
-        <span class="tag" onclick="addTag('estilo minimalista')">minimalista</span>
-        <span class="tag" onclick="addTag('estilo moderno')">moderno</span>
-        <span class="tag" onclick="addTag('janelas amplas')">janelas amplas</span>
-        <span class="tag" onclick="addTag('detalhes em madeira')">+ madeira</span>
-        <span class="tag" onclick="addTag('iluminação embutida')">iluminação</span>
-        <span class="tag" onclick="addTag('jardim vertical')">jardim vertical</span>
-      </div>
-    </div>
-
-    <div class="error-box" id="error-box"></div>
-
-    <button class="btn-gerar" id="btn-gerar" onclick="gerar()">
-      ✦ Gerar simulação com IA
-    </button>
-    <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px">Powered by Replicate · Stable Diffusion</div>
-  </div>
-
-  <div class="result-area">
-    <div class="result-empty" id="empty-state">
-      <div class="result-empty-icon">🏗️</div>
-      <h2>Sua simulação aparece aqui</h2>
-      <p>Envie a foto da fachada, escolha o material e clique em gerar.</p>
-    </div>
-
-    <div class="result-card" id="result-card" style="display:none;position:relative">
-      <div class="result-img-wrap">
-        <img id="result-img" class="result-img" style="display:none" alt="Simulação gerada">
-        <div class="result-placeholder" id="result-placeholder">
-          <div class="r-sky"></div>
-          <div class="r-bld" id="r-facade" style="background:#8B9EA8">
-            <div class="r-wrow"><div class="r-w"></div><div class="r-w"></div><div class="r-w"></div></div>
-            <div class="r-wrow"><div class="r-w"></div><div class="r-w"></div><div class="r-w"></div></div>
-            <div class="r-wrow"><div class="r-w"></div><div class="r-w"></div><div class="r-w"></div></div>
-          </div>
-          <div class="r-gnd"></div>
-        </div>
-        <div class="ai-tag">✦ Gerado por IA</div>
-        <div class="loading-overlay" id="loading" style="display:none">
-          <div class="spinner"></div>
-          <div class="loading-text" id="loading-text">Analisando a fachada...</div>
-          <div class="loading-sub">Aguarde, a IA está trabalhando</div>
-          <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
-        </div>
-      </div>
-      <div class="result-meta">
-        <div class="meta-info">
-          <div class="meta-item"><strong id="r-mat">—</strong>Material</div>
-          <div class="meta-item"><strong id="r-color">—</strong>Tom</div>
-          <div class="meta-item"><strong id="r-time">—</strong>Tempo</div>
-        </div>
-        <div class="result-actions">
-          <button class="btn-action btn-dl" onclick="baixar()">⬇️ Baixar imagem</button>
-          <button class="btn-action btn-sec" onclick="showToast('🌐 Publicado na galeria!')">🌐 Publicar</button>
-          <button class="btn-action btn-sec" onclick="novaSimulacao()">↺ Nova</button>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
-
-<script>
-var curMat = 'ACM';
-var curColorName = 'Areia';
-var hasImage = false;
-var imageBase64 = null;
-var lastImgUrl = null;
-var loadingTimer = null;
-
-function handleFile(input) {
-  var file = input.files[0];
-  if (!file) return;
-  if (file.size > 10 * 1024 * 1024) { showError('Arquivo muito grande. Máximo 10MB.'); return; }
-  var reader = new FileReader();
-  reader.onload = function(e) {
-    imageBase64 = e.target.result;
-    document.getElementById('preview-img').src = imageBase64;
-    document.getElementById('preview-img').style.display = 'block';
-    document.getElementById('upload-placeholder').style.display = 'none';
-    document.getElementById('change-btn').style.display = 'block';
-    document.getElementById('upload-zone').classList.add('has-image');
-    hasImage = true;
-  };
-  reader.readAsDataURL(file);
-}
-
-function clearImage(e) {
-  e.stopPropagation();
-  imageBase64 = null;
-  document.getElementById('preview-img').style.display = 'none';
-  document.getElementById('preview-img').src = '';
-  document.getElementById('upload-placeholder').style.display = 'block';
-  document.getElementById('change-btn').style.display = 'none';
-  document.getElementById('upload-zone').classList.remove('has-image');
-  document.getElementById('file-input').value = '';
-  hasImage = false;
-}
-
-function selMat(el, name) {
-  document.querySelectorAll('.mat-btn').forEach(function(b){ b.classList.remove('active'); });
-  el.classList.add('active');
-  curMat = name;
-}
-
-function selColor(el, name) {
-  document.querySelectorAll('.color-dot').forEach(function(d){ d.classList.remove('active'); });
-  el.classList.add('active');
-  curColorName = name;
-}
-
-function addTag(text) {
-  var ta = document.getElementById('prompt');
-  ta.value = ta.value.trim() ? ta.value.trim() + ', ' + text : text;
-  ta.focus();
-}
-
-async function gerar() {
-  if (!hasImage) { showError('Envie a foto da fachada primeiro.'); return; }
-  var userPrompt = document.getElementById('prompt').value.trim();
-  var fullPrompt = 'Architectural facade, ' + curMat + ' material, ' + curColorName + ' color, modern Brazilian architecture, photorealistic' + (userPrompt ? ', ' + userPrompt : '');
-
-  document.getElementById('empty-state').style.display = 'none';
-  document.getElementById('result-card').style.display = 'block';
-  document.getElementById('result-img').style.display = 'none';
-  document.getElementById('result-placeholder').style.display = 'block';
-  document.getElementById('loading').style.display = 'flex';
-  document.getElementById('btn-gerar').disabled = true;
-  document.getElementById('error-box').style.display = 'none';
-
-  var msgs = ['Analisando a fachada...','Aplicando o material...','Ajustando cores e texturas...','Finalizando os detalhes...'];
-  var mi = 0; var prog = 0;
-  loadingTimer = setInterval(function() {
-    prog = Math.min(prog + 18, 88);
-    document.getElementById('progress').style.width = prog + '%';
-    if (msgs[mi]) { document.getElementById('loading-text').textContent = msgs[mi]; mi++; }
-  }, 1200);
-
-  var start = Date.now();
   try {
-    var base64Data = imageBase64.split(',')[1];
-    var mimeType = imageBase64.split(';')[0].split(':')[1];
-
-    var response = await fetch('/api/generate', {
+    // Inicia a predição
+    const startRes = await fetch('https://api.replicate.com/v1/models/stability-ai/stable-diffusion-img2img/versions/15a3689ee13b0d2616e98820eca31d4af4f36ad8eaa87dd5cefcaad554ffaf76/predictions', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: fullPrompt, image: 'data:' + mimeType + ';base64,' + base64Data })
+      headers: {
+        'Authorization': `Bearer ${apiKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        input: {
+          prompt: prompt,
+          image: image,
+          prompt_strength: 0.5,
+          num_inference_steps: 20,
+          guidance_scale: 7
+        }
+      })
     });
 
-    var data = await response.json();
-    if (data.error) throw new Error(data.error);
-    var imgUrl = data.output;
-    if (!imgUrl) throw new Error('Não foi possível obter a imagem.');
+    const prediction = await startRes.json();
+    if (prediction.error) return res.status(400).json({ error: prediction.error });
 
-    clearInterval(loadingTimer);
-    document.getElementById('progress').style.width = '100%';
-    lastImgUrl = imgUrl;
+    // Polling até o resultado
+    const pollUrl = prediction.urls?.get;
+    if (!pollUrl) return res.status(500).json({ error: 'URL de polling não encontrada' });
 
-    setTimeout(function() {
-      var img = document.getElementById('result-img');
-      img.onload = function() {
-        document.getElementById('result-placeholder').style.display = 'none';
-        document.getElementById('loading').style.display = 'none';
-        img.style.display = 'block';
-        document.getElementById('r-mat').textContent = curMat;
-        document.getElementById('r-color').textContent = curColorName;
-        document.getElementById('r-time').textContent = ((Date.now() - start) / 1000).toFixed(1) + 's';
-        document.getElementById('btn-gerar').disabled = false;
-        showToast('✦ Simulação gerada com sucesso!');
-      };
-      img.src = imgUrl;
-    }, 300);
+    for (let i = 0; i < 40; i++) {
+      await new Promise(r => setTimeout(r, 3000));
+      const pollRes = await fetch(pollUrl, {
+        headers: { 'Authorization': `Bearer ${apiKey}` }
+      });
+      const pollData = await pollRes.json();
 
-  } catch(err) {
-    clearInterval(loadingTimer);
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('btn-gerar').disabled = false;
-    showError('Erro ao gerar: ' + err.message);
+      if (pollData.status === 'succeeded' && pollData.output?.length > 0) {
+        return res.status(200).json({ output: pollData.output[0] });
+      }
+      if (pollData.status === 'failed') {
+        return res.status(500).json({ error: 'A IA não conseguiu processar a imagem.' });
+      }
+    }
+
+    return res.status(500).json({ error: 'Tempo esgotado. Tente novamente.' });
+
+  } catch (err) {
+    return res.status(500).json({ error: err.message });
   }
 }
-
-function baixar() {
-  if (!lastImgUrl) return;
-  var a = document.createElement('a');
-  a.href = lastImgUrl;
-  a.download = 'fachaai-simulacao.png';
-  a.target = '_blank';
-  a.click();
-}
-
-function novaSimulacao() {
-  document.getElementById('result-card').style.display = 'none';
-  document.getElementById('empty-state').style.display = 'block';
-  clearImage({stopPropagation:function(){}});
-  document.getElementById('prompt').value = '';
-  lastImgUrl = null;
-}
-
-function showError(msg) {
-  var el = document.getElementById('error-box');
-  el.textContent = '⚠️ ' + msg;
-  el.style.display = 'block';
-}
-
-function showToast(msg) {
-  var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(function(){ t.classList.remove('show'); }, 2800);
-}
-</script>
-</body>
-</html>

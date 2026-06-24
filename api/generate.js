@@ -7,13 +7,15 @@ export default async function handler(req, res) {
   const apiKey = process.env.REPLICATE_API_TOKEN;
 
   try {
-    const startRes = await fetch('https://api.replicate.com/v1/models/stability-ai/stable-diffusion-img2img/versions/15a3689ee13b0d2616e98820eca31d4af4f36ad8eaa87dd5cefcaad554ffaf76/predictions', {
+    const startRes = await fetch('https://api.replicate.com/v1/predictions', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Prefer': 'wait'
       },
       body: JSON.stringify({
+        version: "a9758cbfbd5f3c2094457d996681af52552901daa44f4a338dece2faf8a87f90",
         input: {
           prompt: prompt,
           image: image,
@@ -25,23 +27,29 @@ export default async function handler(req, res) {
     });
 
     const prediction = await startRes.json();
-    if (prediction.error) return res.status(400).json({ error: prediction.error });
+    
+    if (prediction.error) {
+      return res.status(400).json({ error: prediction.error });
+    }
 
-    const pollUrl = prediction.urls?.get;
-    if (!pollUrl) return res.status(500).json({ error: 'URL de polling não encontrada' });
+    if (prediction.output && prediction.output.length > 0) {
+      return res.status(200).json({ output: prediction.output[0] });
+    }
 
-    for (let i = 0; i < 40; i++) {
-      await new Promise(r => setTimeout(r, 3000));
-      const pollRes = await fetch(pollUrl, {
-        headers: { 'Authorization': `Bearer ${apiKey}` }
-      });
-      const pollData = await pollRes.json();
-
-      if (pollData.status === 'succeeded' && pollData.output?.length > 0) {
-        return res.status(200).json({ output: pollData.output[0] });
-      }
-      if (pollData.status === 'failed') {
-        return res.status(500).json({ error: 'A IA não conseguiu processar a imagem.' });
+    if (prediction.urls?.get) {
+      const pollUrl = prediction.urls.get;
+      for (let i = 0; i < 40; i++) {
+        await new Promise(r => setTimeout(r, 3000));
+        const pollRes = await fetch(pollUrl, {
+          headers: { 'Authorization': `Bearer ${apiKey}` }
+        });
+        const pollData = await pollRes.json();
+        if (pollData.status === 'succeeded' && pollData.output?.length > 0) {
+          return res.status(200).json({ output: pollData.output[0] });
+        }
+        if (pollData.status === 'failed') {
+          return res.status(500).json({ error: 'A IA não conseguiu processar a imagem.' });
+        }
       }
     }
 

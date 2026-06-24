@@ -385,42 +385,18 @@ async function gerar() {
     var base64Data = imageBase64.split(',')[1];
     var mimeType = imageBase64.split(';')[0].split(':')[1];
 
-    var response = await fetch('https://api.replicate.com/v1/models/stability-ai/stable-diffusion-img2img/versions/15a3689ee13b0d2616e98820eca31d4af4f36ad8eaa87dd5cefcaad554ffaf76/predictions', {
+    var response = await fetch('/api/generate', {
       method: 'POST',
-      headers: {
-        'Authorization': 'Bearer ' + apiKey,
-        'Content-Type': 'application/json',
-        'Prefer': 'wait=60'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        input: {
-          prompt: fullPrompt,
-          image: 'data:' + mimeType + ';base64,' + base64Data,
-          prompt_strength: 0.6,
-          num_inference_steps: 30,
-          guidance_scale: 7.5
-        }
+        prompt: fullPrompt,
+        image: 'data:' + mimeType + ';base64,' + base64Data
       })
     });
 
     var data = await response.json();
-
     if (data.error) throw new Error(data.error);
-
-    var imgUrl = null;
-    if (data.output && data.output.length > 0) {
-      imgUrl = data.output[0];
-    } else if (data.urls && data.urls.get) {
-      var pollUrl = data.urls.get;
-      for (var i = 0; i < 30; i++) {
-        await new Promise(function(r){ setTimeout(r, 2000); });
-        var poll = await fetch(pollUrl, { headers: { 'Authorization': 'Bearer ' + apiKey } });
-        var pollData = await poll.json();
-        if (pollData.status === 'succeeded' && pollData.output) { imgUrl = pollData.output[0]; break; }
-        if (pollData.status === 'failed') throw new Error('A IA não conseguiu processar a imagem.');
-      }
-    }
-
+    var imgUrl = data.output;
     if (!imgUrl) throw new Error('Não foi possível obter a imagem.');
 
     clearInterval(loadingTimer);

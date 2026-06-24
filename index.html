@@ -92,13 +92,12 @@ textarea:focus{border-color:rgba(200,169,110,0.4)}
   <div class="logo"><div class="logo-mark">F</div> Facha.ai</div>
   <div style="display:flex;align-items:center;gap:12px">
     <div class="nav-pill">✦ IA ativa</div>
-    <button class="btn-gold" onclick="showToast('Publique na galeria depois de gerar!')">Publicar na galeria</button>
+    <button class="btn-gold">Publicar na galeria</button>
   </div>
 </nav>
 
 <div class="layout">
   <div class="panel">
-
     <div class="panel-section">
       <div class="section-label">📸 Foto da fachada</div>
       <div class="upload-zone" id="upload-zone" onclick="document.getElementById('file-input').click()">
@@ -106,7 +105,7 @@ textarea:focus{border-color:rgba(200,169,110,0.4)}
         <div id="upload-placeholder">
           <div class="upload-icon">🏠</div>
           <div class="upload-text">Clique para enviar a foto</div>
-          <div class="upload-hint">JPG ou PNG · até 10MB</div>
+          <div class="upload-hint">JPG ou PNG · até 5MB</div>
         </div>
         <div class="upload-change" id="change-btn" style="display:none" onclick="clearImage(event)">✕ Trocar</div>
       </div>
@@ -116,38 +115,14 @@ textarea:focus{border-color:rgba(200,169,110,0.4)}
     <div class="panel-section">
       <div class="section-label">🧱 Material</div>
       <div class="mat-grid">
-        <div class="mat-btn active" onclick="selMat(this,'ACM')">
-          <div class="mat-swatch" style="background:linear-gradient(135deg,#a0b4bc,#7a8e96)"></div>
-          <div class="mat-name">ACM</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Porcelanato')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(0deg,#bbb 0,#bbb 1px,#d4c8b8 1px,#d4c8b8 14px),repeating-linear-gradient(90deg,#bbb 0,#bbb 1px,#d4c8b8 1px,#d4c8b8 14px)"></div>
-          <div class="mat-name">Porcelanato</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Grafiato')">
-          <div class="mat-swatch" style="background:#c4b89c"></div>
-          <div class="mat-name">Grafiato</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Textura')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(45deg,#cfc0a4,#cfc0a4 2px,#d8cbb2 2px,#d8cbb2 8px)"></div>
-          <div class="mat-name">Textura</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Pastilha')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(0deg,#fff 0,#fff 1px,#a8b8cc 1px,#a8b8cc 10px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,#a8b8cc 1px,#a8b8cc 10px)"></div>
-          <div class="mat-name">Pastilha</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Concreto')">
-          <div class="mat-swatch" style="background:#b8b4ac"></div>
-          <div class="mat-name">Concreto</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Madeira')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(90deg,#a07848,#a07848 3px,#b89060 3px,#b89060 12px)"></div>
-          <div class="mat-name">Madeira</div>
-        </div>
-        <div class="mat-btn" onclick="selMat(this,'Tijolo')">
-          <div class="mat-swatch" style="background:repeating-linear-gradient(0deg,#8c4830 0,#8c4830 2px,#c47860 2px,#c47860 12px)"></div>
-          <div class="mat-name">Tijolo</div>
-        </div>
+        <div class="mat-btn active" onclick="selMat(this,'ACM')"><div class="mat-swatch" style="background:linear-gradient(135deg,#a0b4bc,#7a8e96)"></div><div class="mat-name">ACM</div></div>
+        <div class="mat-btn" onclick="selMat(this,'Porcelanato')"><div class="mat-swatch" style="background:repeating-linear-gradient(0deg,#bbb 0,#bbb 1px,#d4c8b8 1px,#d4c8b8 14px),repeating-linear-gradient(90deg,#bbb 0,#bbb 1px,#d4c8b8 1px,#d4c8b8 14px)"></div><div class="mat-name">Porcelanato</div></div>
+        <div class="mat-btn" onclick="selMat(this,'Grafiato')"><div class="mat-swatch" style="background:#c4b89c"></div><div class="mat-name">Grafiato</div></div>
+        <div class="mat-btn" onclick="selMat(this,'Textura')"><div class="mat-swatch" style="background:repeating-linear-gradient(45deg,#cfc0a4,#cfc0a4 2px,#d8cbb2 2px,#d8cbb2 8px)"></div><div class="mat-name">Textura</div></div>
+        <div class="mat-btn" onclick="selMat(this,'Pastilha')"><div class="mat-swatch" style="background:repeating-linear-gradient(0deg,#fff 0,#fff 1px,#a8b8cc 1px,#a8b8cc 10px),repeating-linear-gradient(90deg,#fff 0,#fff 1px,#a8b8cc 1px,#a8b8cc 10px)"></div><div class="mat-name">Pastilha</div></div>
+        <div class="mat-btn" onclick="selMat(this,'Concreto')"><div class="mat-swatch" style="background:#b8b4ac"></div><div class="mat-name">Concreto</div></div>
+        <div class="mat-btn" onclick="selMat(this,'Madeira')"><div class="mat-swatch" style="background:repeating-linear-gradient(90deg,#a07848,#a07848 3px,#b89060 3px,#b89060 12px)"></div><div class="mat-name">Madeira</div></div>
+        <div class="mat-btn" onclick="selMat(this,'Tijolo')"><div class="mat-swatch" style="background:repeating-linear-gradient(0deg,#8c4830 0,#8c4830 2px,#c47860 2px,#c47860 12px)"></div><div class="mat-name">Tijolo</div></div>
       </div>
     </div>
 
@@ -180,10 +155,7 @@ textarea:focus{border-color:rgba(200,169,110,0.4)}
     </div>
 
     <div class="error-box" id="error-box"></div>
-
-    <button class="btn-gerar" id="btn-gerar" onclick="gerar()">
-      ✦ Gerar simulação com IA
-    </button>
+    <button class="btn-gerar" id="btn-gerar" onclick="gerar()">✦ Gerar simulação com IA</button>
     <div style="text-align:center;font-size:11px;color:var(--muted);margin-top:8px">Powered by Replicate · Stable Diffusion</div>
   </div>
 
@@ -209,8 +181,8 @@ textarea:focus{border-color:rgba(200,169,110,0.4)}
         <div class="ai-tag">✦ Gerado por IA</div>
         <div class="loading-overlay" id="loading" style="display:none">
           <div class="spinner"></div>
-          <div class="loading-text" id="loading-text">Analisando a fachada...</div>
-          <div class="loading-sub">Aguarde, a IA está trabalhando</div>
+          <div class="loading-text" id="loading-text">Iniciando a IA...</div>
+          <div class="loading-sub">Aguarde, pode levar até 1 minuto</div>
           <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
         </div>
       </div>
@@ -238,21 +210,32 @@ var curColorName = 'Areia';
 var hasImage = false;
 var imageBase64 = null;
 var lastImgUrl = null;
-var loadingTimer = null;
 
 function handleFile(input) {
   var file = input.files[0];
   if (!file) return;
-  if (file.size > 10 * 1024 * 1024) { showError('Arquivo muito grande. Máximo 10MB.'); return; }
+  if (file.size > 5 * 1024 * 1024) { showError('Arquivo muito grande. Máximo 5MB.'); return; }
   var reader = new FileReader();
   reader.onload = function(e) {
-    imageBase64 = e.target.result;
-    document.getElementById('preview-img').src = imageBase64;
-    document.getElementById('preview-img').style.display = 'block';
-    document.getElementById('upload-placeholder').style.display = 'none';
-    document.getElementById('change-btn').style.display = 'block';
-    document.getElementById('upload-zone').classList.add('has-image');
-    hasImage = true;
+    // Reduz tamanho da imagem antes de enviar
+    var img = new Image();
+    img.onload = function() {
+      var canvas = document.createElement('canvas');
+      var maxW = 768; var maxH = 768;
+      var w = img.width; var h = img.height;
+      if (w > maxW) { h = h * maxW / w; w = maxW; }
+      if (h > maxH) { w = w * maxH / h; h = maxH; }
+      canvas.width = w; canvas.height = h;
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h);
+      imageBase64 = canvas.toDataURL('image/jpeg', 0.8);
+      document.getElementById('preview-img').src = e.target.result;
+      document.getElementById('preview-img').style.display = 'block';
+      document.getElementById('upload-placeholder').style.display = 'none';
+      document.getElementById('change-btn').style.display = 'block';
+      document.getElementById('upload-zone').classList.add('has-image');
+      hasImage = true;
+    };
+    img.src = e.target.result;
   };
   reader.readAsDataURL(file);
 }
@@ -271,14 +254,12 @@ function clearImage(e) {
 
 function selMat(el, name) {
   document.querySelectorAll('.mat-btn').forEach(function(b){ b.classList.remove('active'); });
-  el.classList.add('active');
-  curMat = name;
+  el.classList.add('active'); curMat = name;
 }
 
 function selColor(el, name) {
   document.querySelectorAll('.color-dot').forEach(function(d){ d.classList.remove('active'); });
-  el.classList.add('active');
-  curColorName = name;
+  el.classList.add('active'); curColorName = name;
 }
 
 function addTag(text) {
@@ -290,7 +271,7 @@ function addTag(text) {
 async function gerar() {
   if (!hasImage) { showError('Envie a foto da fachada primeiro.'); return; }
   var userPrompt = document.getElementById('prompt').value.trim();
-  var fullPrompt = 'Architectural facade, ' + curMat + ' material, ' + curColorName + ' color, modern Brazilian architecture, photorealistic' + (userPrompt ? ', ' + userPrompt : '');
+  var fullPrompt = 'Architectural facade, ' + curMat + ' cladding material, ' + curColorName + ' color tone, modern Brazilian residential architecture, photorealistic high quality render' + (userPrompt ? ', ' + userPrompt : '');
 
   document.getElementById('empty-state').style.display = 'none';
   document.getElementById('result-card').style.display = 'block';
@@ -299,64 +280,68 @@ async function gerar() {
   document.getElementById('loading').style.display = 'flex';
   document.getElementById('btn-gerar').disabled = true;
   document.getElementById('error-box').style.display = 'none';
-
-  var msgs = ['Analisando a fachada...','Aplicando o material...','Ajustando cores e texturas...','Finalizando os detalhes...'];
-  var mi = 0; var prog = 0;
-  loadingTimer = setInterval(function() {
-    prog = Math.min(prog + 18, 88);
-    document.getElementById('progress').style.width = prog + '%';
-    if (msgs[mi]) { document.getElementById('loading-text').textContent = msgs[mi]; mi++; }
-  }, 1200);
+  document.getElementById('progress').style.width = '0%';
 
   var start = Date.now();
-  try {
-    var base64Data = imageBase64.split(',')[1];
-    var mimeType = imageBase64.split(';')[0].split(':')[1];
 
-    var response = await fetch('/api/generate', {
+  try {
+    // Passo 1: inicia a geração
+    document.getElementById('loading-text').textContent = 'Enviando para a IA...';
+    var genRes = await fetch('/api/generate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: fullPrompt, image: 'data:' + mimeType + ';base64,' + base64Data })
+      body: JSON.stringify({ prompt: fullPrompt, image: imageBase64 })
     });
+    var genData = await genRes.json();
+    if (genData.error) throw new Error(genData.error);
+    var predictionId = genData.id;
 
-    var data = await response.json();
-    if (data.error) throw new Error(data.error);
-    var imgUrl = data.output;
-    if (!imgUrl) throw new Error('Não foi possível obter a imagem.');
+    // Passo 2: polling pelo resultado
+    document.getElementById('loading-text').textContent = 'Processando a fachada...';
+    var prog = 10;
+    for (var i = 0; i < 40; i++) {
+      await new Promise(function(r){ setTimeout(r, 3000); });
+      prog = Math.min(prog + 8, 90);
+      document.getElementById('progress').style.width = prog + '%';
 
-    clearInterval(loadingTimer);
-    document.getElementById('progress').style.width = '100%';
-    lastImgUrl = imgUrl;
+      var msgs = ['Aplicando o material...','Ajustando cores...','Refinando detalhes...','Quase pronto...'];
+      if (msgs[Math.floor(i/3)]) document.getElementById('loading-text').textContent = msgs[Math.floor(i/3)] || 'Finalizando...';
 
-    setTimeout(function() {
-      var img = document.getElementById('result-img');
-      img.onload = function() {
-        document.getElementById('result-placeholder').style.display = 'none';
-        document.getElementById('loading').style.display = 'none';
-        img.style.display = 'block';
-        document.getElementById('r-mat').textContent = curMat;
-        document.getElementById('r-color').textContent = curColorName;
-        document.getElementById('r-time').textContent = ((Date.now() - start) / 1000).toFixed(1) + 's';
-        document.getElementById('btn-gerar').disabled = false;
-        showToast('✦ Simulação gerada com sucesso!');
-      };
-      img.src = imgUrl;
-    }, 300);
+      var pollRes = await fetch('/api/result?id=' + predictionId);
+      var pollData = await pollRes.json();
+
+      if (pollData.status === 'succeeded' && pollData.output && pollData.output.length > 0) {
+        document.getElementById('progress').style.width = '100%';
+        lastImgUrl = pollData.output[0];
+        var img = document.getElementById('result-img');
+        img.onload = function() {
+          document.getElementById('result-placeholder').style.display = 'none';
+          document.getElementById('loading').style.display = 'none';
+          img.style.display = 'block';
+          document.getElementById('r-mat').textContent = curMat;
+          document.getElementById('r-color').textContent = curColorName;
+          document.getElementById('r-time').textContent = ((Date.now() - start) / 1000).toFixed(1) + 's';
+          document.getElementById('btn-gerar').disabled = false;
+          showToast('✦ Simulação gerada com sucesso!');
+        };
+        img.src = lastImgUrl;
+        return;
+      }
+      if (pollData.status === 'failed') throw new Error('A IA não conseguiu processar a imagem.');
+    }
+    throw new Error('Tempo esgotado. Tente novamente.');
 
   } catch(err) {
-    clearInterval(loadingTimer);
     document.getElementById('loading').style.display = 'none';
     document.getElementById('btn-gerar').disabled = false;
-    showError('Erro ao gerar: ' + err.message);
+    showError('Erro: ' + err.message);
   }
 }
 
 function baixar() {
   if (!lastImgUrl) return;
   var a = document.createElement('a');
-  a.href = lastImgUrl;
-  a.download = 'fachaai-simulacao.png';
-  a.target = '_blank';
+  a.href = lastImgUrl; a.download = 'fachaai.png'; a.target = '_blank';
   a.click();
 }
 
@@ -370,14 +355,12 @@ function novaSimulacao() {
 
 function showError(msg) {
   var el = document.getElementById('error-box');
-  el.textContent = '⚠️ ' + msg;
-  el.style.display = 'block';
+  el.textContent = '⚠️ ' + msg; el.style.display = 'block';
 }
 
 function showToast(msg) {
   var t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
+  t.textContent = msg; t.classList.add('show');
   setTimeout(function(){ t.classList.remove('show'); }, 2800);
 }
 </script>

@@ -28,7 +28,12 @@ export default async function handler(req, res) {
 
     const prediction = await startRes.json();
     if (prediction.error) return res.status(400).json({ error: prediction.error });
-    return res.status(200).json({ id: prediction.id });
+    
+    // Retorna o ID e a URL de polling para o navegador fazer o acompanhamento
+    return res.status(200).json({ 
+      id: prediction.id,
+      poll_url: prediction.urls?.get
+    });
 
   } catch (err) {
     return res.status(500).json({ error: err.message });

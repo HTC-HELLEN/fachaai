@@ -296,16 +296,16 @@ async function gerar() {
     if (genData.error) throw new Error(genData.error);
     var predictionId = genData.id;
 
-    // Passo 2: polling pelo resultado
+    // Passo 2: polling direto na Replicate via nosso proxy
     document.getElementById('loading-text').textContent = 'Processando a fachada...';
     var prog = 10;
-    for (var i = 0; i < 40; i++) {
-      await new Promise(function(r){ setTimeout(r, 3000); });
-      prog = Math.min(prog + 8, 90);
+    for (var i = 0; i < 60; i++) {
+      await new Promise(function(r){ setTimeout(r, 2000); });
+      prog = Math.min(prog + 5, 90);
       document.getElementById('progress').style.width = prog + '%';
 
       var msgs = ['Aplicando o material...','Ajustando cores...','Refinando detalhes...','Quase pronto...'];
-      if (msgs[Math.floor(i/3)]) document.getElementById('loading-text').textContent = msgs[Math.floor(i/3)] || 'Finalizando...';
+      document.getElementById('loading-text').textContent = msgs[Math.min(Math.floor(i/5), msgs.length-1)];
 
       var pollRes = await fetch('/api/result?id=' + predictionId);
       var pollData = await pollRes.json();
